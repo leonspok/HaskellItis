@@ -4,11 +4,9 @@ map_regular _ [] = []
 map_regular f (x:xs) = (f x):(map_regular f xs)
 
 map_foldl :: (a -> b) -> [a] -> [b]
-map_foldl _ [] = []
 map_foldl f list = foldl (\tmpList x -> tmpList ++ [(f x)]) [] list
 
 map_foldr :: (a -> b) -> [a] -> [b]
-map_foldr _ [] = []
 map_foldr f list = foldr (\x tmpList -> (f x):tmpList) [] list
 
 main = do
