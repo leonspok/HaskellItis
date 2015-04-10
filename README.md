@@ -1,0 +1,2 @@
+# HaskellItis
+Reposity for homeworks
