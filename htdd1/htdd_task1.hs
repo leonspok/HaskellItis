@@ -27,7 +27,7 @@ func_with_adjustment adjustment = case adjustment of
 -- problem C
 oatmeal_temp_to_adjustment :: OatmealTemp -> Adjustment
 oatmeal_temp_to_adjustment t 
-	| t < 0 || t > 20 	= temp_to_adjustment t
+	| t >= 0 || t <= 20 	= temp_to_adjustment t
 		where
 			temp_to_adjustment x 
 				| x < perfect_oatmeal_temp 	= TurnRight
