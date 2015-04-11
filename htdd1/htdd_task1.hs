@@ -10,7 +10,7 @@ lowest_stove_temp = 0
 highest_stove_temp = 20
 
 func_with_oatmeal :: OatmealTemp -> a
-func_with_oatmeal t | t < 0 || t > 20 = undefined
+func_with_oatmeal t | t >= 0 || t <= 20 = undefined
 
 
 -- problem B
