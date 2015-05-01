@@ -54,21 +54,7 @@ fn_for_type t = case t of
 
 
 
-type Context = [Type]
--- interp. as context with variable types
-
-one_element_context :: Context
-one_element_context = [type_of_true]
-
-fn_for_context :: Context -> a
-fn_for_context ctx = case ctx of
-	x:xs -> undefined x (fn_for_context xs)
-	_ -> undefined
-
-
-
-data Term = TmVariable DeBruijnIndex |
-			TmTypedVariable Type |
+data Term = TmTypedVariable DeBruijnIndex Type |
 			TmAbstraction AbstractionArgumentName Type Term |
 			TmApplication Term Term
 -- interp. as term of lambda calculus
@@ -78,12 +64,11 @@ data Term = TmVariable DeBruijnIndex |
 -- TmApplication - is a term for application operation
 
 simple_abstraction :: Term
-simple_abstraction = TmAbstraction "x" type_of_true (TmVariable 0)
+simple_abstraction = TmAbstraction "x" type_of_true (TmTypedVariable 0 (TpNamed "X"))
 
 fn_for_term :: Term -> a
 fn_for_term term = case term of
-	TmVariable index -> undefined index
-	TmTypedVariable t -> undefined t
+	TmTypedVariable index t -> undefined index t
 	TmAbstraction name t term' -> undefined name t term'
 	TmApplication term1 term2 -> undefined term1 term2
 
@@ -91,26 +76,15 @@ fn_for_term term = case term of
 
 -- Functions
 
-get_type_from_context :: Context -> DeBruijnIndex -> Type
-get_type_from_context ctx index = 
-	if index < length ctx
-		then ctx !! index
-		else TpInvalid
-
-add_binding :: Context -> Type -> Context
-add_binding ctx t = ctx ++ [t]
-
-typeof :: Context -> Term -> Type
-typeof ctx term = case term of
-	TmVariable index -> get_type_from_context ctx index
-	TmTypedVariable t -> t
+typeof :: Term -> Type
+typeof term = case term of
+	TmTypedVariable _ t -> t
 	TmAbstraction arg argType t -> 
-		let ctx' = add_binding ctx argType in
-		let bodyType = typeof ctx' t in
+		let bodyType = typeof t in
 		TpArr argType bodyType
 	TmApplication t1 t2 ->
-		let t1Type = typeof ctx t1 in
-		let t2Type = typeof ctx t2 in
+		let t1Type = typeof t1 in
+		let t2Type = typeof t2 in
 		case t1Type of
 			TpArr t11Type t12Type ->
 				if t2Type == t11Type

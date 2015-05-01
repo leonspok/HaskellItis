@@ -8,6 +8,5 @@ type_to_string t = case t of
 	TpArr t1 t2 -> (type_to_string t1) ++ " -> " ++ (type_to_string t2)
 
 main = do
-	let term = TmApplication (TmAbstraction "k" (TpNamed "K1") (TmApplication (TmAbstraction "x" (TpNamed "T2") (TmAbstraction "y" (TpNamed "T1") (TmVariable 1))) (TmVariable 0))) (TmTypedVariable (TpNamed "K1"))
-	let context = [(TpNamed "T2"), (TpNamed "T3")]
-	putStrLn (type_to_string (typeof context term))
+	let term = TmApplication (TmAbstraction "k" (TpNamed "K1") (TmApplication (TmAbstraction "x" (TpNamed "X1") (TmAbstraction "y" (TpNamed "Y1") (TmTypedVariable 1 (TpNamed "X1")))) (TmTypedVariable (-1) (TpNamed "X1")))) (TmTypedVariable (-2) (TpNamed "K1"))
+	putStrLn (type_to_string (typeof term))
